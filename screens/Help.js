@@ -1,6 +1,4 @@
-import React from "react";
-import AppNavigator from './routes/homeStack'
-import About from './screens/About'
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,10 +6,10 @@ import {
   TextInput,
 } from "react-native";
 
-export default function App() {
+export default function Help() {
   return (
     <View style={styles.wrapper}>
-      <AppNavigator />
+      <TextInput>Help Page</TextInput>
     </View>
   );
 }
@@ -21,8 +19,8 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     backgroundColor: "#ffffff",
+    alignItems: "center",
     paddingTop: Platform.OS === "android" ? 40 : 0,
     display: "flex",
   },
- 
 });
