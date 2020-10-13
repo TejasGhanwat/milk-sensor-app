@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {Feather as Icon} from "@expo/vector-icons"
 import { StatusBar } from "expo-status-bar";
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
@@ -17,32 +18,34 @@ export default function Home({navigation}) {
      const goToHelp = ()=>{
        navigation.navigate('Help')
     }
-   
-   
-  //  const goToCapture = ()=>{
-  //    navigation.navigate('Capture')
-  //  }
   
    const camera = useRef<Camera | null>()
 
+   const _toggleFlash = () =>{
+     setFlash(
+       flash===Camera.Constants.FlashMode.off ?Camera.Constants.FlashMode.on:Camera.Constants.FlashMode.off
+     )
+   }
    const takePicture = async ()=>{
      if(camera.current){
       const options = {quality:0.5, base64:true, skipProcessing: true}
-      let photo = await camera.current.takePictureAsync(options)   
-      
+      let photo = await camera.current.takePictureAsync(options) 
       console.log(camera.current.getSupportedRatiosAsync())
       const source = photo.uri 
+      
 
      if(source){
         camera.current.resumePreview()
-        
+        navigation.navigate('Capture', {photo: photo})
         console.log("picture source", source)
       }
+     
    }
   }
 
   const [hasPermission, setHasPermission] = useState<boolean | null>(null)
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off)
 
   useEffect(() => {
     (async () => {
@@ -66,6 +69,14 @@ export default function Home({navigation}) {
             backgroundColor: 'transparent',
             flexDirection: 'row',
           }}>
+            <TouchableOpacity onPress={()=>_toggleFlash()}>
+            <Icon name={
+              flash === Camera.Constants.FlashMode.on?"zap":"zap-off"
+            }
+            size={20}
+            color="white"
+            />
+            </TouchableOpacity>
           <TouchableOpacity
             style={{
               flex: 0.1,
@@ -83,13 +94,7 @@ export default function Home({navigation}) {
           </TouchableOpacity>
         </View>
       </Camera>
-      <IconButton
-        icon="camera"
-        color={Colors.blue500}
-        size={40}
-        onPress={()=> takePicture()}
-        style={styles.captureButton}
-      />
+      <IconButton icon="camera" size={50} style={styles.captureButton} onPress={takePicture} />
     <View style={styles.footer}>
       <Button  mode="text" onPress={goToAbout}>
         About
