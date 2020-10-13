@@ -1,98 +1,100 @@
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import { Text, View, TouchableOpacity } from 'react-native';
+import { Camera } from 'expo-camera';
 import { IconButton, Colors, Button } from 'react-native-paper';
-
 import {
-  Text,
-  StyleSheet,
-  TextInput,
-  View,
-
-  Image,
-  Platform,
-} from "react-native";
+    StyleSheet,
+    Platform,
+  } from "react-native";
 
 export default function Home({navigation}) {
+    const goToAbout = ()=>{
+        navigation.navigate('About')
+     }
+   
+     const goToHelp = ()=>{
+       navigation.navigate('Help')
+    }
+   
+   
+   const goToCapture = ()=>{
+     navigation.navigate('Capture')
+   }
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
 
-  const goToAbout = ()=>{
-     navigation.navigate('About')
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+    return <View />;
   }
-
-  const goToHelp = ()=>{
-    navigation.navigate('Help')
- }
-
- 
- const goToHome = ()=>{
-  navigation.navigate('Home')
-}
-
-const goToCapture = ()=>{
-  navigation.navigate('Capture')
-}
-
-
-
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
   return (
-    <View style={styles.wrapper}>
-      <View style={styles.cameraview}>
-        <Image
-          source={{
-            height: 450,
-            width: 400,
-            uri:
-              "https://www.plasticsmakeitpossible.com/wp-content/uploads/2010/11/Steve-Alexander1.jpg",
-          }}
-        />
-        <StatusBar style='auto' />
-      </View>
-      <View style={styles.captureButton}>
+    <View style={{ flex: 1 }}>
+      <Camera style={{ flex: 2.5 }} type={type}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+          }}>
+          <TouchableOpacity
+            style={{
+              flex: 0.1,
+              alignSelf: 'flex-end',
+              alignItems: 'center',
+            }}
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}>
+            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+          </TouchableOpacity>
+        </View>
+      </Camera>
       <IconButton
-      
-    icon="camera"
-    color={Colors.blue500}
-    size={40}
-    onPress={goToCapture}
-  />
-        <StatusBar style='auto' />
-      </View>
-      <View style={styles.footer}>
+        icon="camera"
+        color={Colors.blue500}
+        size={40}
+        onPress={goToCapture}
+        style={styles.captureButton}
+      />
+    <View style={styles.footer}>
       <Button  mode="text" onPress={goToAbout}>
         About
       </Button>
       <Button mode="text" onPress={goToHelp}>Help</Button>
         <StatusBar style='auto' />
-      </View>
     </View>
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    height: "100%",
-    width: "100%",
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    paddingTop: Platform.OS === "android" ? 0 : 0,
-    display: "flex",
-  },
-  cameraview: {
-    flex: 6,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-  },
-  captureButton: {
-    flex: 2,
-    alignItems: "center",
-    paddingTop: Platform.OS === "android" ? 40 : 0,
-  },
-  footer: {
-    width: 500,
-    flex: 1,
-    flexDirection:"row",
-    alignItems:"flex-start",
-    justifyContent:"space-around",
- 
-  },
-
-});
+    captureButton: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent:"center",
+      alignSelf:"center",
+      paddingTop: Platform.OS === "android" ? 40 : 0,
+    },
+    footer: {
+      flex: 0.5,
+      flexDirection:"row",
+      alignItems:"stretch",
+      justifyContent:"space-around",
+      
+    },
+  });
+  
