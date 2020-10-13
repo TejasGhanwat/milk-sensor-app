@@ -1,12 +1,14 @@
 import React from "react";
 import {
   StyleSheet,
+  Image,
   Text,
   View,
   Platform,
   TextInput
 } from "react-native";
 import { Card, Title, Paragraph } from 'react-native-paper';
+import { isRequired } from "react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType";
 
 export default function About() {
   return (
