@@ -4,6 +4,7 @@ import Home from '../screens/Home'
 import About from '../screens/About'
 import Help from '../screens/Help'
 import Capture from '../screens/capture'
+import Results from '../screens/results'
 
 const screens  = {
     Home:{
@@ -17,6 +18,9 @@ const screens  = {
     },
     Capture:{
         screen:Capture
+    },
+    Results:{
+        screen:Results
     }
 }
 

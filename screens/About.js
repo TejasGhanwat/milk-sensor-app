@@ -13,7 +13,7 @@ export default function About() {
     <View >
       <Card>
         <Card.Content>
-          <Title>About</Title>
+          
           <Paragraph>A mobile application that helps its users determine
           milk's shelf life by simply clicking a picture by
           their smartphone's camera, of our specially designed 

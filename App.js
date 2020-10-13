@@ -1,6 +1,6 @@
 import React from "react";
 import AppNavigator from './routes/homeStack'
-import About from './screens/About'
+
 import {
   StyleSheet,
   View,
