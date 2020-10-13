@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from "expo-status-bar";
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
@@ -9,6 +9,7 @@ import {
   } from "react-native";
 
 export default function Home({navigation}) {
+  
     const goToAbout = ()=>{
         navigation.navigate('About')
      }
@@ -18,10 +19,29 @@ export default function Home({navigation}) {
     }
    
    
-   const goToCapture = ()=>{
-     navigation.navigate('Capture')
+  //  const goToCapture = ()=>{
+  //    navigation.navigate('Capture')
+  //  }
+  
+   const camera = useRef<Camera | null>()
+
+   const takePicture = async ()=>{
+     if(camera.current){
+      const options = {quality:0.5, base64:true, skipProcessing: true}
+      let photo = await camera.current.takePictureAsync(options)   
+      
+      console.log(camera.current.getSupportedRatiosAsync())
+      const source = photo.uri 
+
+     if(source){
+        camera.current.resumePreview()
+        
+        console.log("picture source", source)
+      }
    }
-  const [hasPermission, setHasPermission] = useState(null);
+  }
+
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null)
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
@@ -39,7 +59,7 @@ export default function Home({navigation}) {
   }
   return (
     <View style={{ flex: 1 }}>
-      <Camera style={{ flex: 2.5 }} type={type}>
+     <Camera ref={camera} style={{flex:2.5}} type={type}>
         <View
           style={{
             flex: 1,
@@ -67,7 +87,7 @@ export default function Home({navigation}) {
         icon="camera"
         color={Colors.blue500}
         size={40}
-        onPress={goToCapture}
+        onPress={()=> takePicture()}
         style={styles.captureButton}
       />
     <View style={styles.footer}>
