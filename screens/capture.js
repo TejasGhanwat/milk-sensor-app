@@ -1,22 +1,43 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   View,
   Platform,
-  Text,
   Image
 } from "react-native";
-import { IconButton, Colors, Button } from 'react-native-paper';
+import { Button } from 'react-native-paper';
+import ImageColors from "react-native-image-colors"
 
 export default function Capture({navigation}) {
+  
+  const imageUri = navigation.getParam('photo')
 
-  const goToResults = ()=>{
+  const goToResults =async ()=>{
     navigation.navigate('Results')
+
+    // const colors = await ImageColors.getColors(imageUri.uri, {
+    //   fallback: "#228B22",
+    // })
+    
+    // if (colors.platform === "android") {
+    //   // Access android properties
+    //   // e.g.
+    //   const averageColor = colors.average
+    //   console.log(averageColor)
+    // } else {
+    //   // Access iOS properties
+    //   // e.g.
+    //   const backgroundColor = colors.background
+    // }
   }
 
-  const imageUri = navigation.getParam('photo')
-  
-  return (
+
+
+ 
+
+
+
+   return (
     <View style={styles.wrapper}>
       <Image source={{ uri: imageUri.uri}} style={{width:380,height:550}}/>
       <View style={styles.captureButton}>
